@@ -1,4 +1,4 @@
-import PostImg from "../../assets/comment-dots.png";
+import PostImg from "../../assets/logo.png";
 
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import * as yup from "yup";

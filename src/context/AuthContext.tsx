@@ -46,6 +46,12 @@ const AuthProvider = ({ children }: any) => {
 
   // const modal = useCustomModal();
 
+  async function getUserData() {
+    const { data } = await api.get("/me", {});
+    setUser(data);
+    console.log(user, "usuário atualizado");
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("auth");
     // const user = localStorage.getItem("BV@user");
@@ -59,8 +65,10 @@ const AuthProvider = ({ children }: any) => {
       // )}`;
 
       // setUser(JSON.parse(user));
+
       setAuthenticated(true);
       setLoading(false);
+      getUserData();
     } else {
       localStorage.removeItem("@token");
       // localStorage.removeItem("@user");
@@ -96,7 +104,8 @@ const AuthProvider = ({ children }: any) => {
       // localStorage.setItem("@user", JSON.stringify(user));
       // api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       history.push("/");
-      setUser(user);
+      const { data } = await api.get("/me", {});
+      setUser(data);
       setAuthenticated(true);
     } catch {}
   }
