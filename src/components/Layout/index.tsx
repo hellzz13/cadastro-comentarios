@@ -42,7 +42,6 @@ export default function Layout({ component }: LayoutProps) {
     { name: "Seu Perfil", href: "#" },
     {
       name: "Sair",
-      href: "/",
       action: () => {
         handleLogOut();
       },

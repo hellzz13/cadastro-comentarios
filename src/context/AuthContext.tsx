@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-// import { AlertModal } from "../components/AlertModal";
-// import { useCustomModal } from "../hooks/useCustomModal";
+import { AlertModal } from "../components/AlertModal";
+import { useCustomModal } from "../hooks/useCustomModal";
 // import api from "../services/api";
 import api from "../services/fakerApi";
 
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }: any) => {
     DEFAULT_VALUE.isActiveLogin
   );
 
-  // const modal = useCustomModal();
+  const modal = useCustomModal();
 
   async function getUserData() {
     const { data } = await api.get("/me", {});
@@ -107,7 +107,16 @@ const AuthProvider = ({ children }: any) => {
       const { data } = await api.get("/me", {});
       setUser(data);
       setAuthenticated(true);
-    } catch {}
+    } catch {
+      modal.setCustomModal({
+        status: true,
+        icon: "error",
+        title: "Falha ao acessar!",
+        text: "",
+        cancelButton: "",
+        confirmButton: "",
+      });
+    }
   }
 
   async function handleLogOut() {
@@ -116,12 +125,9 @@ const AuthProvider = ({ children }: any) => {
 
     // api.defaults.headers.common["Authorization"] = "";
 
-    // localStorage.removeItem("ESSENCIAL@terms");
-    // // window.location.replace("/");
-
     await api.post("/logout", {});
-    setAuthenticated(false);
-    history.push("/"); //verify
+    await setAuthenticated(false);
+    await history.push("/");
   }
 
   // verify loading
@@ -144,13 +150,13 @@ const AuthProvider = ({ children }: any) => {
     >
       {children}
 
-      {/* <AlertModal
-                type={modal.customModal.icon}
-                title={modal.customModal.title}
-                description={modal.customModal.text}
-                isOpen={modal.customModal.status}
-                setIsOpen={modal.handleCustomModalClose}
-            /> */}
+      <AlertModal
+        type={modal.customModal.icon}
+        title={modal.customModal.title}
+        description={modal.customModal.text}
+        isOpen={modal.customModal.status}
+        setIsOpen={modal.handleCustomModalClose}
+      />
     </Context.Provider>
   );
 };

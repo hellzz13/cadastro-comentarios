@@ -61,7 +61,7 @@ export default function Table({ list }: TableProps) {
                         status: true,
                         icon: "alert",
                         title: "Excluir!",
-                        text: "Você tem certeza que deseja excluir esse usuário?",
+                        text: "Você tem certeza que deseja excluir esse post",
                         cancelButton: "Cancelar",
                         confirmButton: "",
                       });
