@@ -1,26 +1,28 @@
 import { useContext, useState } from "react";
 import { PostProps } from "../../types/Post";
 // import InfoContext from "../../context/InfoContext";
-// import { useCustomModal } from "../../hooks/useCustomModal";
+import { useCustomModal } from "../../hooks/useCustomModal";
 // import api from "../../services/api";
 import { UserProps } from "../../types/User";
 // import { ActionModal } from "../ActionModal";
+import api from "../../services/fakerApi";
 import "./styles.css";
+import { ActionModal } from "../ActionModal";
 
 type TableProps = {
   list: PostProps[];
 };
 
 export default function Table({ list }: TableProps) {
-  // const modal = useCustomModal();
-  const [itemId, setItemId] = useState<string>("");
+  const modal = useCustomModal();
+  const [itemId, setItemId] = useState<number | string>("");
   // const { reloadData, setReloadData } = useContext(InfoContext);
 
-  // async function removeUser(id: string) {
-  //     await api.delete(`users/delete/${id}`);
-  //     // await setIsOpen(false);
-  //     setReloadData(!reloadData);
-  // }
+  async function removeUser(id: string | number) {
+    await api.delete("/posts/remove", { post_id: id });
+    // await setIsOpen(false);
+    //   setReloadData(!reloadData);
+  }
 
   return (
     <body className="flex items-center justify-center">
@@ -54,17 +56,17 @@ export default function Table({ list }: TableProps) {
 
                   <td
                     className="border-grey-light border hover:bg-gray-100 p-3 text-mainDarkRed hover:text-red-600 hover:font-medium cursor-pointer"
-                    // onClick={() => {
-                    //     modal.setCustomModal({
-                    //         status: true,
-                    //         icon: "alert",
-                    //         title: "Excluir!",
-                    //         text: "Você tem certeza que deseja excluir esse usuário?",
-                    //         cancelButton: "Cancelar",
-                    //         confirmButton: "",
-                    //     });
-                    //     setItemId(item.id);
-                    // }}
+                    onClick={() => {
+                      modal.setCustomModal({
+                        status: true,
+                        icon: "alert",
+                        title: "Excluir!",
+                        text: "Você tem certeza que deseja excluir esse usuário?",
+                        cancelButton: "Cancelar",
+                        confirmButton: "",
+                      });
+                      setItemId(item.id);
+                    }}
                   >
                     Delete
                   </td>
@@ -73,15 +75,15 @@ export default function Table({ list }: TableProps) {
           </tbody>
         </table>
       </div>
-      {/* <ActionModal
-                type={modal.customModal.icon}
-                title={modal.customModal.title}
-                description={modal.customModal.text}
-                isOpen={modal.customModal.status}
-                setIsOpen={modal.handleCustomModalClose}
-                action={removeUser}
-                itemId={itemId}
-            /> */}
+      <ActionModal
+        type={modal.customModal.icon}
+        title={modal.customModal.title}
+        description={modal.customModal.text}
+        isOpen={modal.customModal.status}
+        setIsOpen={modal.handleCustomModalClose}
+        action={removeUser}
+        itemId={itemId}
+      />
     </body>
   );
 }
