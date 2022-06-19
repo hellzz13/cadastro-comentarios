@@ -1,23 +1,12 @@
 import { Fragment, ReactNode, useContext, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
-  BellIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
   MenuAlt2Icon,
-  UsersIcon,
   XIcon,
   ChevronDownIcon,
   ViewListIcon,
-  DocumentSearchIcon,
   DocumentReportIcon,
-  UserGroupIcon,
-  PencilAltIcon,
 } from "@heroicons/react/outline";
-import { SearchIcon } from "@heroicons/react/solid";
 
 import { Link, Router, useLocation } from "react-router-dom";
 
@@ -59,7 +48,7 @@ export default function Layout({ component }: LayoutProps) {
       name: "Lista de Posts",
       href: "/posts",
       icon: ViewListIcon,
-      current: location.pathname === "/posts" && true,
+      current: location.pathname.startsWith("/post") && true,
     },
   ];
 
@@ -133,8 +122,8 @@ export default function Layout({ component }: LayoutProps) {
                           key={item.name}
                           className={classNames(
                             item.current
-                              ? "bg-mainDarkRed text-white"
-                              : "text-gray-300 hover:bg-mainGray hover:text-white",
+                              ? "bg-primary text-white"
+                              : "text-gray-300 hover:bg-secondary hover:text-white",
                             "group flex items-center px-2 py-2 text-base font-medium rounded-md"
                           )}
                         >
@@ -176,15 +165,15 @@ export default function Layout({ component }: LayoutProps) {
                     to={item.href}
                     className={classNames(
                       item.current
-                        ? "border-l-4 border-mainDarkRed text-mainDarkRed"
-                        : "text-gray-500 hover:bg-mainGray hover:text-white rounded-md",
+                        ? "border-l-4 border-primary text-primary"
+                        : "text-gray-500 hover:bg-secondary hover:text-white rounded-md",
                       "group flex items-center px-2 py-2 text-sm font-medium "
                     )}
                   >
                     <item.icon
                       className={classNames(
                         item.current
-                          ? "text-mainDarkRed"
+                          ? "text-primary"
                           : "text-gray-500 group-hover:text-gray-300 ",
                         "mr-3 flex-shrink-0 h-6 w-6"
                       )}
@@ -215,20 +204,14 @@ export default function Layout({ component }: LayoutProps) {
                   className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 |{/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
                   <div>
                     <Menu.Button className="max-w-xs bg-white flex items-center gap-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                       <span className="sr-only">Open user menu</span>
-                      <p>{user?.name}</p>
+                      <p>Olá, {user?.name}</p>
                       <ChevronDownIcon className="h-4 w-4" />
-                      {/* <img
-                                                className="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
-                                            /> */}
                     </Menu.Button>
                   </div>
                   <Transition
@@ -248,7 +231,7 @@ export default function Layout({ component }: LayoutProps) {
                               href={item.href}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
                               )}
                               onClick={item?.action}
                             >

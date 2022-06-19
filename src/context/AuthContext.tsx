@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { AlertModal } from "../components/AlertModal";
 import { useCustomModal } from "../hooks/useCustomModal";
-// import api from "../services/api";
 import api from "../services/fakerApi";
 
 import history from "../services/history";
@@ -54,77 +53,40 @@ const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("auth");
-    // const user = localStorage.getItem("BV@user");
-
-    // colocar dentro do else
-    // setLoading(false);
 
     if (token) {
-      // api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
-      //     token
-      // )}`;
-
-      // setUser(JSON.parse(user));
-
       setAuthenticated(true);
       setLoading(false);
       getUserData();
     } else {
-      localStorage.removeItem("@token");
-      // localStorage.removeItem("@user");
+      handleLogOut();
     }
   }, []);
 
   async function handleLogin({ username, password }: LoginData) {
-    try {
-      await api.post("/login", {
+    await api
+      .post("/login", {
         username: username,
         password: password,
+      })
+      .catch((e) => {
+        modal.setCustomModal({
+          status: true,
+          icon: "error",
+          title: "Falha ao acessar!",
+          text: e.message,
+          cancelButton: "",
+          confirmButton: "",
+        });
       });
-      // const dataLogin = {
-      //     username: "teste",
-      //     password: "teste",
-      // };
-      // await api.post("/login", {
-      //     username: username,
-      //     password: password,
-      // });
-      // .catch((err) => {
-      //     modal.setCustomModal({
-      //         status: true,
-      //         icon: "error",
-      //         title: "Falha ao acessar!",
-      //         text: err.response.data.error,
-      //         cancelButton: "",
-      //         confirmButton: "",
-      //     });
-      //     throw err.response.status;
-      // });
-      // localStorage.setItem("AUTH@token", JSON.stringify(response));
-      // localStorage.setItem("@user", JSON.stringify(user));
-      // api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      history.push("/");
-      const { data } = await api.get("/me", {});
-      setUser(data);
-      setAuthenticated(true);
-    } catch {
-      modal.setCustomModal({
-        status: true,
-        icon: "error",
-        title: "Falha ao acessar!",
-        text: "",
-        cancelButton: "",
-        confirmButton: "",
-      });
-    }
+
+    history.push("/");
+    const { data } = await api.get("/me", {});
+    setUser(data);
+    setAuthenticated(true);
   }
 
   async function handleLogOut() {
-    // localStorage.removeItem("@token");
-    // localStorage.removeItem("@user");
-
-    // api.defaults.headers.common["Authorization"] = "";
-
     await api.post("/logout", {});
     await setAuthenticated(false);
     await history.push("/");

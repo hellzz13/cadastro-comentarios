@@ -87,8 +87,8 @@ export const AlertModal = ({
                 )}
 
                 {/* content */}
-                <div className=" w-full text-center text-mainGray space-y-5">
-                  <div className="flex justify-center text-mainDarkRed">
+                <div className=" w-full text-center text-secondary space-y-5">
+                  <div className="flex justify-center text-primary">
                     {type === "success" ? (
                       <MdOutlineCheckCircleOutline
                         size={150}

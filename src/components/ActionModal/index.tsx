@@ -95,7 +95,7 @@ export const ActionModal = ({
                 </button>
 
                 {/* content */}
-                <div className=" w-full text-center text-mainGray space-y-5">
+                <div className=" w-full text-center text-secondary space-y-5">
                   <div className="text-2xl">{title}</div>
                   <p>{description}</p>
 

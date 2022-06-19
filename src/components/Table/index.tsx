@@ -8,6 +8,8 @@ import { UserProps } from "../../types/User";
 import api from "../../services/fakerApi";
 import "./styles.css";
 import { ActionModal } from "../ActionModal";
+import EmptyList from "../EmptyList";
+import { Link } from "react-router-dom";
 
 type TableProps = {
   list: PostProps[];
@@ -31,7 +33,7 @@ export default function Table({ list }: TableProps) {
           <thead className="text-white">
             {list &&
               list.map((item) => (
-                <tr className="bg-indigo-700 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                <tr className="bg-secondary flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
                   <th className="p-3 text-left">ID</th>
                   <th className="p-3 text-left">Título</th>
                   <th className="p-3 text-left">Conteúdo</th>
@@ -41,21 +43,21 @@ export default function Table({ list }: TableProps) {
               ))}
           </thead>
           <tbody className="flex-1 sm:flex-none">
-            {list &&
+            {list.length > 0 ? (
               list.map((item) => (
                 <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0 bg-white">
                   <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {item.id}
+                    <Link to={`post/${item.id}`}>{item.id}</Link>
                   </td>
                   <td className="border-grey-light border hover:bg-gray-100 p-3 truncate">
-                    {item.title}
+                    <Link to={`post/${item.id}`}>{item.title}</Link>
                   </td>
                   <td className="border-grey-light border hover:bg-gray-100 p-3 truncate">
-                    {item.content}
+                    <Link to={`post/${item.id}`}>{item.content}</Link>
                   </td>
 
                   <td
-                    className="border-grey-light border hover:bg-gray-100 p-3 text-mainDarkRed hover:text-red-600 hover:font-medium cursor-pointer"
+                    className="border-grey-light border hover:bg-gray-100 p-3 text-primary hover:text-red-600 hover:font-medium cursor-pointer"
                     onClick={() => {
                       modal.setCustomModal({
                         status: true,
@@ -71,7 +73,10 @@ export default function Table({ list }: TableProps) {
                     Delete
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <EmptyList />
+            )}
           </tbody>
         </table>
       </div>

@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
+import CardPost from "../../components/CardPost";
+import CommentBox from "../../components/CommentBox";
 import CreatePostBox from "../../components/CreatePostBox";
-import Table from "../../components/Table";
+
 import { Context } from "../../context/AuthContext";
 
 export default function Dashboard() {
@@ -13,15 +15,15 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1>Ola, {user?.name}</h1>
-      <CreatePostBox />
-
-      {/* <button
-        onClick={() => handleLogOut()}
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Sair
-      </button> */}
+      <div className="grid grid-cols-12">
+        <div className="col-span-12 lg:col-span-6">
+          <CreatePostBox />
+        </div>
+        <div className="col-span-12 mt-10 lg:mt-0 lg:col-span-6">
+          <CardPost />
+          <CommentBox />
+        </div>
+      </div>
     </div>
   );
 }
