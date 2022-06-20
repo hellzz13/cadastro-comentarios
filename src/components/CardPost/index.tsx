@@ -5,6 +5,7 @@ import api from "../../services/fakerApi";
 import { useContext, useEffect, useState } from "react";
 import InfoContext from "../../context/InfoContext";
 import PrimaryButton from "../Button/PrimaryButton";
+import CommentCard from "../CommentCard";
 
 type CardPostProps = {
   postId?: string | number;
@@ -21,28 +22,12 @@ export default function CardPost({
 }: CardPostProps) {
   const modal = useCustomModal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [itemId, setItemId] = useState<number | string>("");
-
+  // const [itemId, setItemId] = useState<number | string>("");
   const [isPostEditable, setIsPostEditable] = useState<boolean>(false);
   const [editableTitle, setEditableTitle] = useState<string>(title);
   const [editableContent, setEditableContent] = useState<string>(content);
 
-  const [isCommentEditable, setIsCommentEditable] = useState<boolean>(false);
-  const [editableComment, setEditableComment] = useState<string>("");
-
   const { reloadData, setReloadData } = useContext(InfoContext);
-
-  async function removeComment(
-    commentId: number | string | undefined,
-    postId: string | number | undefined
-  ) {
-    await api.delete("/comments/remove", {
-      post_id: postId,
-      comment_id: commentId,
-    });
-
-    setReloadData(!reloadData);
-  }
 
   async function handleUpdatePost(
     postId: string | number | undefined,
@@ -58,23 +43,6 @@ export default function CardPost({
     await setIsLoading(false);
     setReloadData(!reloadData);
     setIsPostEditable(false);
-  }
-
-  async function handleUpdateComment(
-    postId: string | number | undefined,
-    commentId: number,
-    content: string | undefined
-  ) {
-    setIsLoading(true);
-    await api.put("/comments/update", {
-      post_id: postId,
-      comment_id: commentId,
-      post: { content: content },
-    });
-
-    await setIsLoading(false);
-    setReloadData(!reloadData);
-    setIsCommentEditable(false);
   }
 
   return (
@@ -96,8 +64,8 @@ export default function CardPost({
                     defaultValue={title}
                   />
                   {/* {errors.title && (
-                  <span className="text-red-600">{errors.title.message}</span>
-                )} */}
+             <span className="text-red-600">{errors.title.message}</span>
+           )} */}
                 </div>
               ) : (
                 <h2 className="text-lg font-semibold text-gray-900 -mt-1">
@@ -164,82 +132,7 @@ export default function CardPost({
       </div>
 
       {comments &&
-        comments.map((item) => (
-          <div className="flex bg-white shadow-lg rounded-md mx-4 md:mx-auto max-w-md md:max-w-2xl justify-between p-3">
-            <div>
-              {isCommentEditable ? (
-                <div className="mb-2">
-                  <label htmlFor="content" className="text-lg text-gray-600">
-                    <small>Editar comentário</small>
-                  </label>
-                  <textarea
-                    //   {...register("content")}
-                    className="w-full h-20 p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
-                    name="content"
-                    placeholder=""
-                    value={editableComment}
-                    defaultValue={item.content}
-                    onChange={(e) => setEditableComment(e.target.value)}
-                    rows={2}
-                    cols={40}
-                  ></textarea>
-                  {/* {errors.content && (
-                  <span className="text-red-600">{errors.content.message}</span>
-                )} */}
-                  <PrimaryButton
-                    title="Salvar"
-                    onClick={() =>
-                      handleUpdateComment(postId, item.id, editableComment)
-                    }
-                    isLoading={isLoading}
-                  />
-                </div>
-              ) : (
-                <>
-                  <small>Comentário:</small>
-                  <p className="text-grey-darkest leading-normal text-lg">
-                    {item.content}
-                  </p>
-                </>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => setIsCommentEditable(!isCommentEditable)}
-                className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
-              >
-                Editar
-              </button>
-              <button
-                onClick={() => {
-                  modal.setCustomModal({
-                    status: true,
-                    icon: "alert",
-                    title: "Excluir!",
-                    text: "Você tem certeza que deseja excluir esse comentário",
-                    cancelButton: "Cancelar",
-                    confirmButton: "",
-                  });
-                  setItemId(item.id);
-                }}
-                className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-red-600 cursor-pointer"
-              >
-                Excluir
-              </button>
-            </div>
-          </div>
-        ))}
-
-      <ActionModal
-        type={modal.customModal.icon}
-        title={modal.customModal.title}
-        description={modal.customModal.text}
-        isOpen={modal.customModal.status}
-        setIsOpen={modal.handleCustomModalClose}
-        action={removeComment}
-        postId={postId}
-        itemId={itemId}
-      />
+        comments.map((item) => <CommentCard comment={item} postId={postId} />)}
     </>
   );
 }
