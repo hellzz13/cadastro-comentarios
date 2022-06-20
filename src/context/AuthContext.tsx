@@ -3,6 +3,7 @@ import { AlertModal } from "../components/AlertModal";
 import { useCustomModal } from "../hooks/useCustomModal";
 import api from "../services/fakerApi";
 
+import { Router } from "react-router-dom";
 import history from "../services/history";
 import { UserProps } from "../types/User";
 
@@ -48,7 +49,6 @@ const AuthProvider = ({ children }: any) => {
   async function getUserData() {
     const { data } = await api.get("/me", {});
     setUser(data);
-    console.log(user, "usuário atualizado");
   }
 
   useEffect(() => {
@@ -89,7 +89,6 @@ const AuthProvider = ({ children }: any) => {
   async function handleLogOut() {
     await api.post("/logout", {});
     await setAuthenticated(false);
-    await history.push("/");
   }
 
   // verify loading
