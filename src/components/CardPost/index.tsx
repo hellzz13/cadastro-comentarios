@@ -1,8 +1,6 @@
-import { useCustomModal } from "../../hooks/useCustomModal";
 import { CommentsProps } from "../../types/Comment";
-import { ActionModal } from "../ActionModal";
 import api from "../../services/fakerApi";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import InfoContext from "../../context/InfoContext";
 import PrimaryButton from "../Button/PrimaryButton";
 import CommentCard from "../CommentCard";
@@ -20,9 +18,7 @@ export default function CardPost({
   comments,
   postId,
 }: CardPostProps) {
-  const modal = useCustomModal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [itemId, setItemId] = useState<number | string>("");
   const [isPostEditable, setIsPostEditable] = useState<boolean>(false);
   const [editableTitle, setEditableTitle] = useState<string>(title);
   const [editableContent, setEditableContent] = useState<string>(content);
@@ -54,7 +50,6 @@ export default function CardPost({
               {isPostEditable ? (
                 <div className=" relative ">
                   <input
-                    //   {...register("title")}
                     type="text"
                     id="contact-form-name"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -63,9 +58,6 @@ export default function CardPost({
                     onChange={(e) => setEditableTitle(e.target.value)}
                     defaultValue={title}
                   />
-                  {/* {errors.title && (
-             <span className="text-red-600">{errors.title.message}</span>
-           )} */}
                 </div>
               ) : (
                 <h2 className="text-lg font-semibold text-gray-900 -mt-1">
@@ -84,7 +76,6 @@ export default function CardPost({
               <div className="col-span-2">
                 <label className="text-gray-700" htmlFor="name"></label>
                 <textarea
-                  //    {...register("content")}
                   className="flex-1 mt-3 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   id="content"
                   placeholder="Digite aqui seu post"

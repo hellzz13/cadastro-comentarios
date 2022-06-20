@@ -5,9 +5,19 @@ import { useContext, useState } from "react";
 import { Context } from "../../context/AuthContext";
 import api from "../../services/fakerApi";
 import history from "../../services/history";
+import PrimaryButton from "../../components/Button/PrimaryButton";
+import SecondaryButton from "../../components/Button/SecondaryButton";
+import { AlertModal } from "../../components/AlertModal";
+import { useCustomModal } from "../../hooks/useCustomModal";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+  const [isVisibleConfirmPassword, setIsVisibleConfirmPassword] =
+    useState<boolean>(false);
+
+  const modal = useCustomModal();
 
   interface IFormInputs {
     name: string;
@@ -32,20 +42,33 @@ export default function Register() {
     resolver: yupResolver(schema),
   });
 
-  const { handleLogin } = useContext(Context);
-
-  async function login(data: IFormInputs) {
-    console.log(data);
-    setIsLoading(true);
-    await handleLogin(data);
-    await setIsLoading(false);
-  }
-
   async function handleRegister(data: IFormInputs) {
-    await api.post("/register", {
-      name: data.name,
-      username: data.username,
-      password: data.password,
+    setIsLoading(true);
+    try {
+      await api.post("/register", {
+        name: data.name,
+        username: data.username,
+        password: data.password,
+      });
+    } catch (e: any) {
+      modal.setCustomModal({
+        status: true,
+        icon: "error",
+        title: "Falha ao registrar!",
+        text: e.message,
+        cancelButton: "",
+        confirmButton: "",
+      });
+    }
+
+    setIsLoading(false);
+    modal.setCustomModal({
+      status: true,
+      icon: "success",
+      title: "Cadastro realizado com sucesso!",
+      text: "Agora você pode acessar a aplicação",
+      cancelButton: "",
+      confirmButton: "Ok",
     });
   }
 
@@ -55,11 +78,6 @@ export default function Register() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-              {/* <img
-                className="mx-auto h-32 w-auto"
-                src={PostImg}
-                alt="Comentários"
-              /> */}
               <h2 className="my-6 text-center text-3xl font-extrabold text-gray-900">
                 Registro
               </h2>
@@ -124,12 +142,22 @@ export default function Register() {
                 >
                   Senha
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 relative">
+                  <div
+                    className="absolute z-10 right-4 top-2 cursor-pointer"
+                    onClick={() => setIsVisiblePassword(!isVisiblePassword)}
+                  >
+                    {isVisiblePassword ? (
+                      <AiOutlineEyeInvisible size={20} />
+                    ) : (
+                      <AiOutlineEye size={20} />
+                    )}
+                  </div>
                   <input
                     {...register("password")}
                     id="password"
                     name="password"
-                    type="password"
+                    type={isVisiblePassword ? "text" : "password"}
                     autoComplete="current-password"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
@@ -148,14 +176,26 @@ export default function Register() {
                 >
                   Confirme sua senha
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 relative">
+                  <div
+                    className="absolute z-10 right-4 top-2 cursor-pointer"
+                    onClick={() =>
+                      setIsVisibleConfirmPassword(!isVisibleConfirmPassword)
+                    }
+                  >
+                    {isVisibleConfirmPassword ? (
+                      <AiOutlineEyeInvisible size={20} />
+                    ) : (
+                      <AiOutlineEye size={20} />
+                    )}
+                  </div>
                   <input
                     {...register("confirmPassword")}
                     id="confirmPassword"
                     name="confirmPassword"
-                    type="password"
+                    type={isVisibleConfirmPassword ? "text" : "password"}
                     autoComplete="current-confirmPassword"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="appearance-none  block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
                 {errors.confirmPassword && (
@@ -166,25 +206,31 @@ export default function Register() {
               </div>
             </form>
             <div className="flex flex-col gap-3 mt-4">
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              <PrimaryButton
+                title="Registrar"
                 form="registerForm"
-              >
-                Registrar
-              </button>
-              <button
+                isLoading={isLoading}
+              />
+              <SecondaryButton
+                title="Voltar"
                 onClick={() => history.goBack()}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Voltar
-              </button>
+              />
             </div>
             {/* space */}
             <div className="mt-6"></div>
           </div>
         </div>
       </div>
+
+      <AlertModal
+        type={modal.customModal.icon}
+        title={modal.customModal.title}
+        description={modal.customModal.text}
+        isOpen={modal.customModal.status}
+        setIsOpen={modal.handleCustomModalClose}
+        confirmButton={modal.customModal.confirmButton}
+        path="/"
+      />
     </>
   );
 }
