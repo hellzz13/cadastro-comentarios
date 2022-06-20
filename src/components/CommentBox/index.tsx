@@ -5,7 +5,11 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import PrimaryButton from "../Button/PrimaryButton";
 
-export default function CommentBox() {
+type CommentBoxProps = {
+  postId?: number;
+};
+
+export default function CommentBox({ postId }: CommentBoxProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   interface IFormInputs {
@@ -28,8 +32,8 @@ export default function CommentBox() {
   async function handleCreateComment(data: IFormInputs) {
     setIsLoading(true);
     await api.post("/comments/create", {
-      post_id: 4,
-      comment: { content: "Comentario teste" },
+      post_id: postId,
+      comment: { content: data.content },
     });
     await setIsLoading(false);
   }

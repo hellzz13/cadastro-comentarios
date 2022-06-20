@@ -22,8 +22,12 @@ export default function PostDetails() {
 
   return (
     <div>
-      <CardPost title={post?.title} content={post?.content} />
-      <CommentBox />
+      <CardPost
+        title={post?.title}
+        content={post?.content}
+        comments={post?.comments}
+      />
+      <CommentBox postId={parseInt(id)} />
     </div>
   );
 }

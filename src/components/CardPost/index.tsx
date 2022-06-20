@@ -1,9 +1,12 @@
+import { CommentsProps } from "../../types/Comment";
+
 type CardPostProps = {
   title?: string;
   content?: string;
+  comments?: CommentsProps[];
 };
 
-export default function CardPost({ title, content }: CardPostProps) {
+export default function CardPost({ title, content, comments }: CardPostProps) {
   return (
     <>
       <div className="flex bg-white shadow-lg rounded-lg mx-4 md:mx-auto max-w-md md:max-w-2xl ">
@@ -31,22 +34,30 @@ export default function CardPost({ title, content }: CardPostProps) {
                     d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
                   />
                 </svg>
-                <span>8</span>
+                <span>{comments?.length}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex bg-white shadow-lg rounded-md mx-4 md:mx-auto max-w-md md:max-w-2xl justify-between p-3">
-        <p className="text-grey-darkest leading-normal text-lg">text</p>
-        <button
-          v-if="editable"
-          className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
-        >
-          Edit
-        </button>
-      </div>
+      {comments &&
+        comments.map((item) => (
+          <div className="flex bg-white shadow-lg rounded-md mx-4 md:mx-auto max-w-md md:max-w-2xl justify-between p-3">
+            <div>
+              <small>Comentário:</small>
+              <p className="text-grey-darkest leading-normal text-lg">
+                {item.content}
+              </p>
+            </div>
+            <button
+              v-if="editable"
+              className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
+            >
+              Editar
+            </button>
+          </div>
+        ))}
     </>
   );
 }
