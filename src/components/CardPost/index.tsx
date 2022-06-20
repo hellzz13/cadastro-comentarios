@@ -1,12 +1,40 @@
+import { useCustomModal } from "../../hooks/useCustomModal";
 import { CommentsProps } from "../../types/Comment";
+import { ActionModal } from "../ActionModal";
+import api from "../../services/fakerApi";
+import { useContext, useState } from "react";
+import InfoContext from "../../context/InfoContext";
 
 type CardPostProps = {
+  postId?: string | number;
   title?: string;
   content?: string;
   comments?: CommentsProps[];
 };
 
-export default function CardPost({ title, content, comments }: CardPostProps) {
+export default function CardPost({
+  title,
+  content,
+  comments,
+  postId,
+}: CardPostProps) {
+  const modal = useCustomModal();
+  const [itemId, setItemId] = useState<number | string>("");
+
+  const { reloadData, setReloadData } = useContext(InfoContext);
+
+  async function removeComment(
+    commentId: number | string | undefined,
+    postId: string | number | undefined
+  ) {
+    await api.delete("/comments/remove", {
+      post_id: postId,
+      comment_id: commentId,
+    });
+
+    setReloadData(!reloadData);
+  }
+
   return (
     <>
       <div className="flex bg-white shadow-lg rounded-lg mx-4 md:mx-auto max-w-md md:max-w-2xl ">
@@ -50,14 +78,40 @@ export default function CardPost({ title, content, comments }: CardPostProps) {
                 {item.content}
               </p>
             </div>
-            <button
-              v-if="editable"
-              className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
-            >
-              Editar
-            </button>
+            <div>
+              <button className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer">
+                Editar
+              </button>
+              <button
+                onClick={() => {
+                  modal.setCustomModal({
+                    status: true,
+                    icon: "alert",
+                    title: "Excluir!",
+                    text: "Você tem certeza que deseja excluir esse comentário",
+                    cancelButton: "Cancelar",
+                    confirmButton: "",
+                  });
+                  setItemId(item.id);
+                }}
+                className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-red-600 cursor-pointer"
+              >
+                Excluir
+              </button>
+            </div>
           </div>
         ))}
+
+      <ActionModal
+        type={modal.customModal.icon}
+        title={modal.customModal.title}
+        description={modal.customModal.text}
+        isOpen={modal.customModal.status}
+        setIsOpen={modal.handleCustomModalClose}
+        action={removeComment}
+        postId={postId}
+        itemId={itemId}
+      />
     </>
   );
 }

@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingTable from "../../components/LoadingTable";
 import Table from "../../components/Table";
+import InfoContext from "../../context/InfoContext";
 import api from "../../services/fakerApi";
 import { PostProps } from "../../types/Post";
 
 export default function Post() {
   const [postList, setPostList] = useState<PostProps[]>();
+  const { reloadData } = useContext(InfoContext);
 
   useEffect(() => {
     async function getPostList() {
@@ -15,7 +17,7 @@ export default function Post() {
     }
 
     getPostList();
-  }, []);
+  }, [reloadData]);
 
   return (
     <div>

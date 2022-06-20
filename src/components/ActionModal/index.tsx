@@ -25,8 +25,12 @@ type ActionModalProps = {
 
   setIsQuickViewOpen?: (isOpen: boolean) => void;
 
-  action: (id: number | string) => Promise<void>;
-  itemId: number | string;
+  action: (
+    postId: string | number | undefined,
+    commentId: number | string | undefined
+  ) => Promise<void>;
+  itemId?: number | string;
+  postId?: number | string;
 };
 
 export const ActionModal = ({
@@ -37,6 +41,7 @@ export const ActionModal = ({
   setIsOpen,
   action,
   itemId,
+  postId,
 }: ActionModalProps) => {
   const completeButtonRef = useRef(null);
 
@@ -110,7 +115,7 @@ export const ActionModal = ({
                     <PrimaryButton
                       title={"Confirmar"}
                       onClick={() => {
-                        action(itemId);
+                        action(itemId, postId);
                         setIsOpen(false);
                       }}
                     />
