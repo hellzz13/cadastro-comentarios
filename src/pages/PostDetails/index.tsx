@@ -1,10 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PrimaryButton from "../../components/Button/PrimaryButton";
 import CardPost from "../../components/CardPost";
 import CommentBox from "../../components/CommentBox";
 import InfoContext from "../../context/InfoContext";
 import api from "../../services/fakerApi";
+import history from "../../services/history";
 import { PostProps } from "../../types/Post";
+import { MdChevronLeft } from "react-icons/md";
+import EmptyList from "../../components/EmptyList";
+import LoadingTable from "../../components/LoadingTable";
 
 export default function PostDetails() {
   const [post, setPost] = useState<PostProps>();
@@ -25,12 +30,24 @@ export default function PostDetails() {
 
   return (
     <div>
-      <CardPost
-        postId={parseInt(id)}
-        title={post?.title}
-        content={post?.content}
-        comments={post?.comments}
-      />
+      <div className="mx-4 md:mx-auto max-w-md md:max-w-2xl">
+        <div className="w-32 mb-5">
+          <PrimaryButton onClick={() => history.goBack()}>
+            <MdChevronLeft size={24} className="text-white" />
+          </PrimaryButton>
+        </div>
+      </div>
+      {post ? (
+        <CardPost
+          postId={parseInt(id)}
+          title={post?.title}
+          content={post?.content}
+          comments={post?.comments}
+        />
+      ) : (
+        <LoadingTable />
+      )}
+
       <CommentBox postId={parseInt(id)} />
     </div>
   );

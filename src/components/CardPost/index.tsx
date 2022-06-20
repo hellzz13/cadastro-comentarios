@@ -2,13 +2,14 @@ import { useCustomModal } from "../../hooks/useCustomModal";
 import { CommentsProps } from "../../types/Comment";
 import { ActionModal } from "../ActionModal";
 import api from "../../services/fakerApi";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import InfoContext from "../../context/InfoContext";
+import PrimaryButton from "../Button/PrimaryButton";
 
 type CardPostProps = {
   postId?: string | number;
-  title?: string;
-  content?: string;
+  title: string;
+  content: string;
   comments?: CommentsProps[];
 };
 
@@ -19,7 +20,15 @@ export default function CardPost({
   postId,
 }: CardPostProps) {
   const modal = useCustomModal();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [itemId, setItemId] = useState<number | string>("");
+
+  const [isPostEditable, setIsPostEditable] = useState<boolean>(false);
+  const [editableTitle, setEditableTitle] = useState<string>(title);
+  const [editableContent, setEditableContent] = useState<string>(content);
+
+  const [isCommentEditable, setIsCommentEditable] = useState<boolean>(false);
+  const [editableComment, setEditableComment] = useState<string>("");
 
   const { reloadData, setReloadData } = useContext(InfoContext);
 
@@ -35,18 +44,103 @@ export default function CardPost({
     setReloadData(!reloadData);
   }
 
+  async function handleUpdatePost(
+    postId: string | number | undefined,
+    title: string,
+    content: string
+  ) {
+    setIsLoading(true);
+    await api.put("/posts/update", {
+      post_id: postId,
+      post: { title: title, content: content },
+    });
+
+    await setIsLoading(false);
+    setReloadData(!reloadData);
+    setIsPostEditable(false);
+  }
+
+  async function handleUpdateComment(
+    postId: string | number | undefined,
+    commentId: number,
+    content: string | undefined
+  ) {
+    setIsLoading(true);
+    await api.put("/comments/update", {
+      post_id: postId,
+      comment_id: commentId,
+      post: { content: content },
+    });
+
+    await setIsLoading(false);
+    setReloadData(!reloadData);
+    setIsCommentEditable(false);
+  }
+
   return (
     <>
       <div className="flex bg-white shadow-lg rounded-lg mx-4 md:mx-auto max-w-md md:max-w-2xl ">
-        <div className="flex items-start px-4 py-6">
-          <div>
+        <div className="flex items-start px-4 py-6 w-full">
+          <div className="w-full">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900 -mt-1">
-                {title}
-              </h2>
+              {isPostEditable ? (
+                <div className=" relative ">
+                  <input
+                    //   {...register("title")}
+                    type="text"
+                    id="contact-form-name"
+                    className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Título"
+                    value={editableTitle}
+                    onChange={(e) => setEditableTitle(e.target.value)}
+                    defaultValue={title}
+                  />
+                  {/* {errors.title && (
+                  <span className="text-red-600">{errors.title.message}</span>
+                )} */}
+                </div>
+              ) : (
+                <h2 className="text-lg font-semibold text-gray-900 -mt-1">
+                  {title}
+                </h2>
+              )}
+              <button
+                onClick={() => setIsPostEditable(!isPostEditable)}
+                className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
+              >
+                Editar
+              </button>
             </div>
 
-            <p className="mt-3 text-gray-700 text-sm">{content}</p>
+            {isPostEditable ? (
+              <div className="col-span-2">
+                <label className="text-gray-700" htmlFor="name"></label>
+                <textarea
+                  //    {...register("content")}
+                  className="flex-1 mt-3 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  id="content"
+                  placeholder="Digite aqui seu post"
+                  name="content"
+                  rows={2}
+                  cols={40}
+                  value={editableContent}
+                  defaultValue={content}
+                  onChange={(e) => setEditableContent(e.target.value)}
+                ></textarea>
+
+                <PrimaryButton
+                  title="Salvar"
+                  onClick={() =>
+                    handleUpdatePost(postId, editableTitle, editableContent)
+                  }
+                  isLoading={isLoading}
+                />
+              </div>
+            ) : (
+              <div>
+                <p className="mt-3 text-gray-700 text-sm">{content}</p>
+              </div>
+            )}
             <div className="mt-4 flex items-center">
               <div className="flex mr-2 text-gray-700 text-sm cursor-pointer">
                 <svg
@@ -73,13 +167,47 @@ export default function CardPost({
         comments.map((item) => (
           <div className="flex bg-white shadow-lg rounded-md mx-4 md:mx-auto max-w-md md:max-w-2xl justify-between p-3">
             <div>
-              <small>Comentário:</small>
-              <p className="text-grey-darkest leading-normal text-lg">
-                {item.content}
-              </p>
+              {isCommentEditable ? (
+                <div className="mb-2">
+                  <label htmlFor="content" className="text-lg text-gray-600">
+                    <small>Editar comentário</small>
+                  </label>
+                  <textarea
+                    //   {...register("content")}
+                    className="w-full h-20 p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
+                    name="content"
+                    placeholder=""
+                    value={editableComment}
+                    defaultValue={item.content}
+                    onChange={(e) => setEditableComment(e.target.value)}
+                    rows={2}
+                    cols={40}
+                  ></textarea>
+                  {/* {errors.content && (
+                  <span className="text-red-600">{errors.content.message}</span>
+                )} */}
+                  <PrimaryButton
+                    title="Salvar"
+                    onClick={() =>
+                      handleUpdateComment(postId, item.id, editableComment)
+                    }
+                    isLoading={isLoading}
+                  />
+                </div>
+              ) : (
+                <>
+                  <small>Comentário:</small>
+                  <p className="text-grey-darkest leading-normal text-lg">
+                    {item.content}
+                  </p>
+                </>
+              )}
             </div>
             <div>
-              <button className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer">
+              <button
+                onClick={() => setIsCommentEditable(!isCommentEditable)}
+                className="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm text-blue-600 cursor-pointer"
+              >
                 Editar
               </button>
               <button

@@ -39,7 +39,7 @@ export default function Layout({ component }: LayoutProps) {
 
   const navigation = [
     {
-      name: "Dashboard",
+      name: "Criar Post",
       href: "/",
       icon: DocumentReportIcon,
       current: location.pathname === "/" && true,

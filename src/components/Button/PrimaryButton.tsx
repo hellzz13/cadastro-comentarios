@@ -1,14 +1,16 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import { FaSpinner } from "react-icons/fa";
 
 type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  title: string;
+  title?: string;
   isLoading?: boolean;
+  children?: ReactNode;
 };
 
 export default function PrimaryButton({
   title,
   isLoading,
+  children,
   ...rest
 }: PrimaryButtonProps) {
   return (
@@ -19,7 +21,7 @@ export default function PrimaryButton({
       {isLoading ? (
         <FaSpinner className="animate-spin mx-auto" size={20} />
       ) : (
-        title
+        title || children
       )}
     </button>
   );
