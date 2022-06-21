@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# Envio e edição de Posts e Comentários
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Sobre a aplicação**
 
-## Available Scripts
+O projeto consiste em um pequeno sistema de postagens desenvolvido com ReactJS, utilizando create-react-app. O projeto basicamente consiste em um CRUD de posts e comentários, onde um usuário, que precisa se registrar na aplicação pode: criar, listar, editar e remover posts e comentários vinculados aos mesmos. A autenticação é feita utilizando contextAPI e as informações são armazenadas na FakerApi que simula o backend mantendo os dados no localstoge.
 
-In the project directory, you can run:
+Validação de formulário utilizando react-hook-form + yup para garantir envio de informações.
 
-### `npm start`
+Estilização utilizando tailwindcss para garantir responsividade em dispositivos desktop e mobile.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Imagem utilizada na aplicação do autor Storyset publicada no site de bando de imgens freepik e disponibilizada de maneira free com atribuição. Link:**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+[Ilustração do conceito de mensagens | Vetor Grátis](https://br.freepik.com/vetores-gratis/ilustracao-do-conceito-de-mensagens_5911276.htm#query=comentarios&position=0&from_view=search)
 
-### `npm test`
+**Ferramentas utilizadas:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- A aplicação foi desenvolvida utilizando reactjs e typescript.
+- Estilizada com TailwindCss.
+- Utilizando também as bibliotecas:
+  - react-icons (kit e icones que podem ser utilizados como componentes react, facilitando o layout),
+  - headlessui + heroicons (integração com componentes tailwind e garantindo acessibilidade),
+  - react-hook-form + yup (para auxiliar na validação de formulários).
+  - react-router-dom (para criação de rotas de SPA)
+- Foi utilizado a FakerApi que fazer o CRUD dos posts e comentários usando LocalStorage do navegador
 
-### `npm run build`
+## Link do projeto
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Deploy vercel e pode ser acessado:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+[Crie e edite posts](https://cadastro-comentarios.vercel.app/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Como executar
 
-### `npm run eject`
+Abra o terminal e copie o repositório
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+git clone https://github.com/hellzz13/cadastro-comentarios.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Após copiar e acessar o diretório da aplicação, será necessário rodar o comando abaixo para instalar as dependências do projeto
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Agora para que possa rodar o projeto será necessário rodar o comando
 
-## Learn More
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+E será criado um [localhost](http://localhost) na porta 3000, que podemos acessar no link : [http://localhost:3000/](http://localhost:3000/)

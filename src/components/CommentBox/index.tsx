@@ -59,7 +59,6 @@ export default function CommentBox({ postId }: CommentBoxProps) {
             {...register("content")}
             className="w-full h-20 p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
             name="content"
-            placeholder=""
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
           ></textarea>

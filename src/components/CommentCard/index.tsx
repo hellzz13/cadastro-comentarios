@@ -8,7 +8,6 @@ import api from "../../services/fakerApi";
 
 type CommentCardProps = {
   comment: CommentsProps;
-
   postId: string | number | undefined;
 };
 
