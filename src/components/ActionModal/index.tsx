@@ -1,17 +1,10 @@
-import React, { ReactNode, useEffect } from "react";
-import { Fragment, useContext, useRef, useState } from "react";
-import { Dialog, RadioGroup, Transition } from "@headlessui/react";
+import { ReactNode } from "react";
+import { Fragment, useRef } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 
-import { MdOutlineCheckCircleOutline, MdErrorOutline } from "react-icons/md";
-import { FiXCircle } from "react-icons/fi";
-
-// import api from "../../services/api";
-
-import { FaSpinner } from "react-icons/fa";
 import SecondaryButton from "../Button/SecondaryButton";
 import PrimaryButton from "../Button/PrimaryButton";
-// import InfoContext from "../../context/InfoContext";
 
 type ActionModalProps = {
   type: "success" | "alert" | "error" | "none";

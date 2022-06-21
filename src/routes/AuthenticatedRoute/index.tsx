@@ -12,9 +12,6 @@ const AuthenticatedRoute = () => (
     <AdminRoute path="/posts" component={() => <Posts />} />
     <AdminRoute path="/post/:id" component={() => <PostDetails />} />
     <AdminRoute path="/perfil" component={() => <Profile />} />
-
-    {/* caso a rota não exista */}
-    {/* <AdminRoute path="*" component={() => <Redirect to="/" />} /> */}
   </Switch>
 );
 

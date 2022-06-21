@@ -92,12 +92,12 @@ export const AlertModal = ({
                     {type === "success" ? (
                       <MdOutlineCheckCircleOutline
                         size={150}
-                        className="text-lightPurple"
+                        className="text-green-500"
                       />
                     ) : type === "alert" ? (
-                      <MdErrorOutline size={150} className="text-lightPurple" />
+                      <MdErrorOutline size={150} className="text-yellow-400" />
                     ) : type === "error" ? (
-                      <FiXCircle size={150} className=" text-purple" />
+                      <FiXCircle size={150} className=" text-red-600" />
                     ) : (
                       <></>
                     )}

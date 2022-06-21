@@ -1,8 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
-import { Context } from "../../context/AuthContext";
+import { useState } from "react";
 import api from "../../services/fakerApi";
 import history from "../../services/history";
 import PrimaryButton from "../../components/Button/PrimaryButton";

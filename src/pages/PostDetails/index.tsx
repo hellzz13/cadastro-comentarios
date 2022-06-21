@@ -22,7 +22,6 @@ export default function PostDetails() {
     async function getPost() {
       const { data } = await api.get("/posts/view", { post_id: parseInt(id) });
       await setPost(data);
-      console.log(post);
     }
 
     getPost();

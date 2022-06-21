@@ -2,8 +2,6 @@ import { createContext, useEffect, useState } from "react";
 import { AlertModal } from "../components/AlertModal";
 import { useCustomModal } from "../hooks/useCustomModal";
 import api from "../services/fakerApi";
-
-import { Router } from "react-router-dom";
 import history from "../services/history";
 import { UserProps } from "../types/User";
 
@@ -90,12 +88,6 @@ const AuthProvider = ({ children }: any) => {
     await api.post("/logout", {});
     await setAuthenticated(false);
   }
-
-  // verify loading
-
-  // if (loading) {
-  //     return <h1>Loading...</h1>;
-  // }
 
   return (
     <Context.Provider

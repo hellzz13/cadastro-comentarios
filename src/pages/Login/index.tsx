@@ -5,8 +5,6 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import { Context } from "../../context/AuthContext";
-import api from "../../services/fakerApi";
-import history from "../../services/history";
 import { Link } from "react-router-dom";
 import PrimaryButton from "../../components/Button/PrimaryButton";
 
@@ -35,7 +33,6 @@ export default function Login() {
   const { handleLogin } = useContext(Context);
 
   async function login(data: IFormInputs) {
-    console.log(data);
     setIsLoading(true);
     await handleLogin(data);
     await setIsLoading(false);

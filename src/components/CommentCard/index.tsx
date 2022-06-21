@@ -43,7 +43,6 @@ export default function CommentCard({ comment, postId }: CommentCardProps) {
     content: string | undefined
   ) {
     setIsLoading(true);
-    console.log(postId, commentId, editableComment);
     await api.put("/comments/update", {
       post_id: postId,
       comment_id: commentId,
@@ -72,8 +71,11 @@ export default function CommentCard({ comment, postId }: CommentCardProps) {
                 defaultValue={comment.content}
                 onChange={(e) => setEditableComment(e.target.value)}
                 rows={2}
-                cols={40}
+                cols={35}
               ></textarea>
+              {!!!editableComment.length && (
+                <span className="text-red-600">Digite algum conteúdo</span>
+              )}
 
               <PrimaryButton
                 title="Salvar"
@@ -81,6 +83,7 @@ export default function CommentCard({ comment, postId }: CommentCardProps) {
                   handleUpdateComment(postId, comment.id, editableComment);
                 }}
                 isLoading={isLoading}
+                disabled={!!!editableComment.length ? true : false}
               />
             </div>
           ) : (

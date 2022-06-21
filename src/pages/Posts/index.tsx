@@ -13,7 +13,6 @@ export default function Post() {
     async function getPostList() {
       const { data } = await api.get("/posts", {});
       await setPostList(data);
-      console.log(postList);
     }
 
     getPostList();

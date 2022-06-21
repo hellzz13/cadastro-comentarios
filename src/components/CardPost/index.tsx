@@ -48,7 +48,7 @@ export default function CardPost({
           <div className="w-full">
             <div className="flex items-center justify-between">
               {isPostEditable ? (
-                <div className=" relative ">
+                <div className="relative">
                   <input
                     type="text"
                     id="contact-form-name"
@@ -58,6 +58,9 @@ export default function CardPost({
                     onChange={(e) => setEditableTitle(e.target.value)}
                     defaultValue={title}
                   />
+                  {!!!editableTitle.length && (
+                    <span className="text-red-600">Digite algum conteúdo</span>
+                  )}
                 </div>
               ) : (
                 <h2 className="text-lg font-semibold text-gray-900 -mt-1">
@@ -86,8 +89,15 @@ export default function CardPost({
                   defaultValue={content}
                   onChange={(e) => setEditableContent(e.target.value)}
                 ></textarea>
-
+                {!!!editableContent.length && (
+                  <span className="text-red-600">Digite algum conteúdo</span>
+                )}
                 <PrimaryButton
+                  disabled={
+                    !!!editableContent.length || !!!editableTitle.length
+                      ? true
+                      : false
+                  }
                   title="Salvar"
                   onClick={() =>
                     handleUpdatePost(postId, editableTitle, editableContent)
